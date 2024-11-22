@@ -30,8 +30,11 @@ public class EvilHangman {
 
         previousGuesses = new HashSet<>();
         incorrectGuesses = new TreeSet<>();
-        int targetWordLength = new Random().nextInt(maxLengthInList(wordList));
+        System.out.println("max length");
+        int targetIndex = new Random().nextInt(allLengthInList(wordList).size());
+        int targetWordLength = allLengthInList(wordList).get(targetIndex);
         inputScanner = new Scanner(System.in);
+        System.out.println("targetWordLength: " + targetWordLength);
         evilSolution  = new EvilSolution(targetWordLength, wordList);
     }
 
@@ -40,8 +43,8 @@ public class EvilHangman {
     public void start() {
         while (!evilSolution.gotSolved()) {
             char thisGuess = askForGuess();
-            evilSolution.placeGuess(thisGuess);
-
+            //evilSolution.getNewCandidateList(thisGuess);
+            System.out.println(evilSolution.getNewCandidateList(thisGuess));
         }
     }
 
@@ -50,10 +53,8 @@ public class EvilHangman {
     // ask user to input a guess
     private char askForGuess() {
         while (true) {
-
             System.out.println("Guess a letter.\n");
             evilSolution.progress();
-
             System.out.println("Incorrect guesses:\n" + incorrectGuesses.toString());
             String input = inputScanner.next();
             if (input.length() != 1) {
@@ -67,17 +68,16 @@ public class EvilHangman {
 
     }
 
-
+    /*
     // record what's being guessed
     private void recordGuess(char guess) {
         previousGuesses.add(guess);
-        boolean isCorrect = evilSolution.placeGuess(guess);
+        boolean isCorrect = evilSolution.getNewCandidateList(guess,wordList);
         if (!isCorrect) {
             incorrectGuesses.add(guess);
         }
     }
-
-
+    */
 
 
 
@@ -97,14 +97,12 @@ public class EvilHangman {
 
 
     // get the maximum length of the pass in dictionary
-    public int maxLengthInList (ArrayList<String> dictionary) {
-        int maxLength = dictionary.get(0).length();
+    public ArrayList<Integer> allLengthInList(ArrayList<String> dictionary) {
+        ArrayList<Integer> lenSet = new ArrayList<>();
         for (int i = 1; i < dictionary.size(); i++) {
-            if (dictionary.get(i).length() > maxLength) {
-                maxLength = dictionary.get(i).length();
-            }
+            lenSet.add(dictionary.get(i).length());
         }
-        return  maxLength;
+        return lenSet;
     }
 
 

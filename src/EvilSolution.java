@@ -18,6 +18,7 @@ public class EvilSolution {
     */
     public EvilSolution (int solutionLength, ArrayList<String> inputList) {
         this.solutionLength = solutionLength;
+
         this.candidateList = new ArrayList<>();
         for (int i = 0; i < inputList.size(); i++) {
             if (inputList.get(i).length() == solutionLength) {
@@ -26,6 +27,7 @@ public class EvilSolution {
         }
         this.wordPattern = new ArrayList<>();
         for (int i = 0; i < solutionLength; i++) {
+            System.out.println(i);
             wordPattern.add('_');
         }
 
@@ -34,25 +36,25 @@ public class EvilSolution {
 
     // once we have the guess should split existing words in the candidatePool into word family
     // should have the key that is wordFamily and value is an ArrayList
-    public ArrayList<String> getNewCandidateList(char guess, ArrayList<String> currentList) {
+    public ArrayList<String> getNewCandidateList(char guess) {
 
         HashMap<ArrayList<Character>, ArrayList<String>> intermediateResult = new HashMap<>();
         ArrayList<String> possibleCandidateList = new ArrayList<>();
 
-        for (int i = 0; i < currentList.size(); i++ ) {
-            for (int j = 0; j < currentList.get(i).length(); j++) {
-                if (tempCopy.get(j) == '_' && candidateList.get(i).charAt(j) == guess) {
-                    tempCopy.set(j, guess);
+        for (int i = 0; i < candidateList.size(); i++) {
+            ArrayList<Character> testPattern = new ArrayList<>(wordPattern);
+            for (int j = 0; j < candidateList.get(i).length(); j++) {
+                if (testPattern.get(j) == '_' && candidateList.get(i).charAt(j) == guess) {
+                    testPattern.set(j, guess);
                 }
             }
-            tempCopy.clear();
-            for (int k = 0; k < wordFamily.size(); k++) {
-                tempCopy.add(wordFamily.get(k));
+
+            if (intermediateResult.containsKey(testPattern)) {
+                intermediateResult.get(testPattern).add(candidateList.get(i));
+            } else {
+                possibleCandidateList.add(candidateList.get(i));
+                intermediateResult.put(testPattern, possibleCandidateList);
             }
-            possibleCandidateList.add(candidateList.get(i));
-            intermediateResult.put(tempCopy, possibleCandidateList);
-            System.out.println("intermediarte result");
-            System.out.println(intermediateResult);
         }
 
         int maxSize = 0;
@@ -80,21 +82,18 @@ public class EvilSolution {
                 }
             }
         }
-        wordFamily = tempKey;
-        System.out.println("word fam set at end: " + wordFamily);
+        wordPattern = tempKey;
         candidateList = intermediateResult.get(intermediateResult.get(tempKey));
-        System.out.println("candidate list at the end");
-        System.out.println(candidateList);
-        return true;
+        return candidateList;
     }
-//    return false;
+
 
 
 
 
     // print out the current progress
     public void progress() {
-        for (char c : wordFamily) {
+        for (char c : wordPattern) {
             System.out.print(c + " ");
         }
         System.out.println();
@@ -104,7 +103,7 @@ public class EvilSolution {
 
     // check if the EvilHangman is solved
     public boolean gotSolved() {
-        return !wordFamily.contains('_');
+        return !wordPattern.contains('_');
     }
 
 
