@@ -168,6 +168,47 @@ public class WordTest {
     }
 
 
+    @Test
+    void testWordPattern1() {
+        ArrayList<String> dictionary = new ArrayList<>();
+        dictionary.add("apple");
+        dictionary.add("arrow");
+        dictionary.add("align");
+        EvilSolution evilSolution = new EvilSolution(5, dictionary);
+
+        ArrayList<Character> expected = new ArrayList<>();
+        expected.add('_');
+        expected.add('_');
+        expected.add('_');
+        expected.add('_');
+        expected.add('_');
+
+        ArrayList<Character> actual = evilSolution.getWordPattern();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testWordPattern2() {
+        ArrayList<String> dictionary = new ArrayList<>();
+        dictionary.add("apple");
+        dictionary.add("arrow");
+        dictionary.add("align");
+        EvilSolution evilSolution = new EvilSolution(5, dictionary);
+
+        evilSolution.getNewCandidateList('a');
+        evilSolution.getNewCandidateList('l');
+
+        ArrayList<Character> expected = new ArrayList<>();
+        expected.add('a');
+        expected.add('_');
+        expected.add('_');
+        expected.add('_');
+        expected.add('_');
+
+        assertEquals(expected, evilSolution.getWordPattern());
+    }
+
+
 }
 
 
