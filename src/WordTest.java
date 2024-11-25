@@ -200,7 +200,7 @@ public class WordTest {
 
         ArrayList<Character> expected = new ArrayList<>();
         expected.add('a');
-        expected.add('_');
+        expected.add('l');
         expected.add('_');
         expected.add('_');
         expected.add('_');
