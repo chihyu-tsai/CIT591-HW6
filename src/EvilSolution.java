@@ -7,8 +7,6 @@ public class EvilSolution {
     private ArrayList<Character> wordPattern;
     private ArrayList<String> candidateList;
 
-
-
     /*
     the solution is dynamic, don't have a fixed solution
     loop through all words in the dictionary (stored in an ArrayList) and if word length equals the length that is passed in the constructor, it is a potential candidate
@@ -16,18 +14,18 @@ public class EvilSolution {
     wordFamily original format --> _ _ _ _ (depends on the passed in length)
     candidateList is the remaining words in the dictionary that can be solution
     */
+
     public EvilSolution (int solutionLength, ArrayList<String> inputList) {
         this.solutionLength = solutionLength;
-
         this.candidateList = new ArrayList<>();
-        for (int i = 0; i < inputList.size(); i++) {
-            if (inputList.get(i).length() == solutionLength) {
-                candidateList.add(inputList.get(i));
+
+        for (String word : inputList) {
+            if (word.length() == solutionLength) {
+                candidateList.add(word);
             }
         }
         this.wordPattern = new ArrayList<>();
         for (int i = 0; i < solutionLength; i++) {
-            System.out.println(i);
             wordPattern.add('_');
         }
 
@@ -39,7 +37,6 @@ public class EvilSolution {
     public ArrayList<String> getNewCandidateList(char guess) {
 
         HashMap<ArrayList<Character>, ArrayList<String>> intermediateResult = new HashMap<>();
-        ArrayList<String> possibleCandidateList = new ArrayList<>();
 
         for (int i = 0; i < candidateList.size(); i++) {
             ArrayList<Character> testPattern = new ArrayList<>(wordPattern);
@@ -48,12 +45,12 @@ public class EvilSolution {
                     testPattern.set(j, guess);
                 }
             }
-
             if (intermediateResult.containsKey(testPattern)) {
                 intermediateResult.get(testPattern).add(candidateList.get(i));
             } else {
-                possibleCandidateList.add(candidateList.get(i));
-                intermediateResult.put(testPattern, possibleCandidateList);
+                intermediateResult.put(testPattern, new ArrayList<>());
+                intermediateResult.get(testPattern).add(candidateList.get(i));
+
             }
         }
 
@@ -83,10 +80,9 @@ public class EvilSolution {
             }
         }
         wordPattern = tempKey;
-        candidateList = intermediateResult.get(intermediateResult.get(tempKey));
+        candidateList = intermediateResult.get(tempKey);
         return candidateList;
     }
-
 
 
 
@@ -104,6 +100,15 @@ public class EvilSolution {
     // check if the EvilHangman is solved
     public boolean gotSolved() {
         return !wordPattern.contains('_');
+    }
+
+
+    public String getFinalWord() {
+        String finalWord = "";
+        for (char c : wordPattern) {
+            finalWord += c;
+        }
+        return finalWord;
     }
 
 
