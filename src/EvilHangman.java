@@ -45,11 +45,12 @@ public class EvilHangman {
     public void start() {
         while (!evilSolution.gotSolved()) {
             char thisGuess = askForGuess();
-            ArrayList<String> updatedCandidateList = evilSolution.getNewCandidateList(thisGuess);
+            evilSolution.getNewCandidateList(thisGuess);
 
             // Check if the guess was correct
             if (!evilSolution.getWordPattern().contains(thisGuess)) {
-                incorrectGuesses.add(thisGuess); // Add only if the guess is incorrect
+                // Add only if the guess is incorrect
+                incorrectGuesses.add(thisGuess);
             }
 
         }
@@ -66,7 +67,7 @@ public class EvilHangman {
             evilSolution.progress();
             System.out.println("Incorrect guesses:\n" + incorrectGuesses.toString());
             String input = inputScanner.next();
-            if (input.length() != 1) {
+            if (input.length() != 1 || !Character.isLetter(input.charAt(0))) {
                 System.out.println("Please enter a single character.");
             } else if (previousGuesses.contains(input.charAt(0))) {
                 System.out.println("You've already guessed that.");
