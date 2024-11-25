@@ -1,11 +1,14 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
 public class WordTest {
+
     @Test
-    void testGetNewCandidateList() {
+    void testGetNewCandidateList1() {
 
         //assume test word length is 11
         ArrayList<String> inputList = new ArrayList<>();
@@ -31,142 +34,140 @@ public class WordTest {
     }
 
     @Test
-    void testGotSolved() {
-        WordRecommender wr = new WordRecommender("engDictionary.txt");
-        String word1 = "surfer";
-        String word2 = "surf";
+    void testGetNewCandidateList2() {
 
-        double expected = 2.0;
-        double actual = wr.getSimilarity(word1, word2);
-
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void testGetFinalWord() {
-        WordRecommender wr = new WordRecommender("engDictionary.txt");
-        String word1 = "";
-        String word2 = "school";
-
-        double expected = 0.0;
-        double actual = wr.getSimilarity(word1, word2);
-
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void testGotSolved() {
-        WordRecommender wr = new WordRecommender("engDictionary.txt");
-        String word1 = "prank";
-        String word2 = "rank";
-
-        double expected = 2.0;
-        double actual = wr.getSimilarity(word1, word2);
-
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void testGetSimilarity5() {
-        WordRecommender wr = new WordRecommender("engDictionary.txt");
-        String word1 = "crave";
-        String word2 = "save";
-
-        double expected = 1.5;
-        double actual = wr.getSimilarity(word1, word2);
-
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void getFinalWord() {
-        WordRecommender wr = new WordRecommender("engDictionary.txt");
-        String word = "broun";
-        int tolerance = 2;
-        double commonPercent = 0.5;
-        int topN = 4;
+        ArrayList<String> inputList = new ArrayList<>();
+        inputList.add("nagasaki");
+        inputList.add("quackish");
+        inputList.add("landowner");
+        inputList.add("exchanger");
+        inputList.add("than");
+        inputList.add("analogues");
+        inputList.add("schematic");
+        inputList.add("presiding");
 
         ArrayList<String> expected = new ArrayList<>();
-        expected.add("brown");
-        expected.add("croon");
-        expected.add("trout");
-        expected.add("bosun");
-        ArrayList<String> actual = wr.getWordSuggestions(word, tolerance, commonPercent, topN);
+        expected.add("analogues");
+        expected.add("schematic");
+
+        // also checks if we get the words with right length
+        EvilSolution evilSolution = new EvilSolution(9, inputList);
+        ArrayList<String> actual = evilSolution.getNewCandidateList('r');
+
+        assertEquals(expected, actual);
+
+    }
+
+    @Test
+    void testGetNewCandidateList3() {
+
+        ArrayList<String> inputList = new ArrayList<>();
+        inputList.add("hypocrisy");
+        inputList.add("effortless");
+        inputList.add("schematic");
+        inputList.add("restorative");
+        inputList.add("glued");
+        inputList.add("presiding");
+        inputList.add("fleetingly");
+        inputList.add("fitters");
+
+        ArrayList<String> expected = new ArrayList<>();
+        expected.add("hypocrisy");
+        expected.add("presiding");
+
+        // also checks if we get the words with right length
+        EvilSolution evilSolution = new EvilSolution(9, inputList);
+        ArrayList<String> actual = evilSolution.getNewCandidateList('t');
+
+        assertEquals(expected, actual);
+
+    }
+
+
+    @Test
+    void testGetFinalWord1() {
+        ArrayList<String> inputList = new ArrayList<>();
+        inputList.add("apple");
+
+        EvilSolution solution = new EvilSolution(5, inputList);
+
+        solution.getNewCandidateList('a');
+        solution.getNewCandidateList('p');
+        solution.getNewCandidateList('l');
+        solution.getNewCandidateList('e');
+
+        assertEquals("apple", solution.getFinalWord());
+    }
+
+    @Test
+    void testGetFinalWord2() {
+        ArrayList<String> inputList = new ArrayList<>();
+        inputList.add("banana");
+
+        EvilSolution evilSolution = new EvilSolution(6, inputList);
+
+        // Simulate some correct guesses
+        evilSolution.getNewCandidateList('b');
+        evilSolution.getNewCandidateList('a');
+
+        String expected = "ba_a_a";
+        String actual = evilSolution.getFinalWord();
 
         assertEquals(expected, actual);
     }
 
     @Test
-    void getWordSuggestions2() {
-        WordRecommender wr = new WordRecommender("engDictionary.txt");
-        String word = "flamme";
-        int tolerance = 2;
-        double commonPercent = 0.5;
-        int topN = 4;
+    void testGetFinalWord3() {
+        ArrayList<String> inputList = new ArrayList<>();
+        EvilSolution evilSolution = new EvilSolution(5, inputList);
 
-        ArrayList<String> expected = new ArrayList<>();
-        expected.add("flames");
-        expected.add("flamed");
-        expected.add("flange");
-        expected.add("framed");
-        ArrayList<String> actual = wr.getWordSuggestions(word, tolerance, commonPercent, topN);
+        String expected = "_____";
+        String actual = evilSolution.getFinalWord();
 
         assertEquals(expected, actual);
+    }
+
+
+
+    @Test
+    void testGotSolved1() {
+        ArrayList<String> inputList = new ArrayList<>();
+        inputList.add("apple");
+        EvilSolution solution = new EvilSolution(5, inputList);
+
+        assertFalse(solution.gotSolved());
+
+        solution.getNewCandidateList('a');
+        solution.getNewCandidateList('p');
+        solution.getNewCandidateList('l');
+        solution.getNewCandidateList('e');
+
+        assertTrue(solution.gotSolved());
+
     }
 
     @Test
-    void getWordSuggestions3() {
-        WordRecommender wr = new WordRecommender("engDictionary.txt");
-        String word = "strwwbery";
-        int tolerance = 2;
-        double commonPercent = 0.5;
-        int topN = 4;
+    void testGotSolved2() {
+        ArrayList<String> inputList = new ArrayList<>();
+        inputList.add("banana");
+        EvilSolution evilSolution = new EvilSolution(6, inputList);
 
-        ArrayList<String> expected = new ArrayList<>();
-        expected.add("shrubbery");
-        expected.add("strawberry");
-        expected.add("shrewdest");
-        expected.add("remembers");
-        ArrayList<String> actual = wr.getWordSuggestions(word, tolerance, commonPercent, topN);
+        // Simulate some correct guesses
+        evilSolution.getNewCandidateList('b');
+        evilSolution.getNewCandidateList('a');
 
-        assertEquals(expected, actual);
+        assertFalse(evilSolution.gotSolved());
     }
 
     @Test
-    void getWordSuggestions4() {
-        WordRecommender wr = new WordRecommender("engDictionary.txt");
-        String word = "brodcatt";
-        int tolerance = 2;
-        double commonPercent = 0.5;
-        int topN = 4;
+    void testGotSolved3() {
+        ArrayList<String> inputList = new ArrayList<>();
+        EvilSolution evilSolution = new EvilSolution(5, inputList);
 
-        ArrayList<String> expected = new ArrayList<>();
-        expected.add("braggart");
-        expected.add("birdbath");
-        expected.add("browbeat");
-        expected.add("handcart");
-        ArrayList<String> actual = wr.getWordSuggestions(word, tolerance, commonPercent, topN);
-
-        assertEquals(expected, actual);
+        assertFalse(evilSolution.gotSolved());
     }
 
-    @Test
-    void getWordSuggestions5() {
-        WordRecommender wr = new WordRecommender("engDictionary.txt");
-        String word = "calorii";
-        int tolerance = 2;
-        double commonPercent = 0.5;
-        int topN = 4;
 
-        ArrayList<String> expected = new ArrayList<>();
-        expected.add("calorie");
-        expected.add("caldron");
-        expected.add("canonic");
-        expected.add("colonic");
-        ArrayList<String> actual = wr.getWordSuggestions(word, tolerance, commonPercent, topN);
-
-        assertEquals(expected, actual);
-    }
 }
 
 
