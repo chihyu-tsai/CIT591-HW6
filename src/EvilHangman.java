@@ -29,10 +29,12 @@ public class EvilHangman {
         }
 
         previousGuesses = new HashSet<>();
-        incorrectGuesses = new TreeSet<>();
-        System.out.println("max length");
-        int targetIndex = new Random().nextInt(allLengthInList(wordList).size());
-        int targetWordLength = allLengthInList(wordList).get(targetIndex);
+        incorrectGuesses = new TreeSet<>(); // with order
+
+        ArrayList<Integer> wordLengths = allLengthInList(wordList);
+        int targetIndex = new Random().nextInt(wordLengths.size());
+        int targetWordLength = wordLengths.get(targetIndex);
+
         inputScanner = new Scanner(System.in);
         System.out.println("targetWordLength: " + targetWordLength);
         evilSolution  = new EvilSolution(targetWordLength, wordList);
@@ -43,9 +45,10 @@ public class EvilHangman {
     public void start() {
         while (!evilSolution.gotSolved()) {
             char thisGuess = askForGuess();
-            //evilSolution.getNewCandidateList(thisGuess);
             System.out.println(evilSolution.getNewCandidateList(thisGuess));
+            incorrectGuesses.add(thisGuess);
         }
+        printVictory();
     }
 
 
@@ -62,6 +65,7 @@ public class EvilHangman {
             } else if (previousGuesses.contains(input.charAt(0))) {
                 System.out.println("You've already guessed that.");
             } else {
+                previousGuesses.add(input.charAt(0));
                 return input.charAt(0);
             }
         }
@@ -96,16 +100,23 @@ public class EvilHangman {
     }
 
 
-    // get the maximum length of the pass in dictionary
+    // get every word length of the dictionary, no duplicate so use set
     public ArrayList<Integer> allLengthInList(ArrayList<String> dictionary) {
-        ArrayList<Integer> lenSet = new ArrayList<>();
-        for (int i = 1; i < dictionary.size(); i++) {
-            lenSet.add(dictionary.get(i).length());
+        ArrayList<Integer> lenList = new ArrayList<>();
+        for (int i = 0; i < dictionary.size(); i++) {
+            // remove duplicates so the list looks clean
+            if (!lenList.contains(dictionary.get(i).length())) {
+                //add the length value into the list if not in list yet
+                lenList.add(dictionary.get(i).length());
+            }
         }
-        return lenSet;
+        return lenList;
     }
 
-
+    private void printVictory() {
+        String finalWord = evilSolution.getFinalWord();
+        System.out.printf("Congrats! The word was %s%n", finalWord);
+    }
 
 
 
