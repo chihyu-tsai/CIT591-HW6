@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Solution {
 
-	//private String target;
+	private String target;
 	private int targetSize;
 	private ArrayList<Character> partialSolution;
 	private int missingChars;
