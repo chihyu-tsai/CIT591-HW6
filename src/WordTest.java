@@ -205,7 +205,30 @@ public class WordTest {
         expected.add('_');
         expected.add('_');
 
-        assertEquals(expected, evilSolution.getWordPattern());
+        ArrayList<Character> actual = evilSolution.getWordPattern();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testWordPattern3() {
+        ArrayList<String> dictionary = new ArrayList<>();
+        dictionary.add("apple");
+        dictionary.add("arrow");
+        dictionary.add("align");
+        EvilSolution evilSolution = new EvilSolution(5, dictionary);
+
+        // Simulate an incorrect guess 'z'
+        evilSolution.getNewCandidateList('z');
+
+        ArrayList<Character> expected = new ArrayList<>();
+        expected.add('_');
+        expected.add('_');
+        expected.add('_');
+        expected.add('_');
+        expected.add('_');
+
+        ArrayList<Character> actual = evilSolution.getWordPattern();
+        assertEquals(expected, actual);
     }
 
 
