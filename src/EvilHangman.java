@@ -45,10 +45,16 @@ public class EvilHangman {
     public void start() {
         while (!evilSolution.gotSolved()) {
             char thisGuess = askForGuess();
-            System.out.println(evilSolution.getNewCandidateList(thisGuess));
-            incorrectGuesses.add(thisGuess);
+            ArrayList<String> updatedCandidateList = evilSolution.getNewCandidateList(thisGuess);
+
+            // Check if the guess was correct
+            if (!evilSolution.getWordPattern().contains(thisGuess)) {
+                incorrectGuesses.add(thisGuess); // Add only if the guess is incorrect
+            }
+
         }
         printVictory();
+
     }
 
 
