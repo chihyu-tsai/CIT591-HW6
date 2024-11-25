@@ -118,6 +118,9 @@ public class EvilSolution {
         return finalWord;
     }
 
+    public ArrayList<Character> getWordPattern() {
+        return wordPattern;
+    }
 
 
 }
