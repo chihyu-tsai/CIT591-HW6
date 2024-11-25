@@ -35,7 +35,10 @@ public class EvilSolution {
     // once we have the guess should split existing words in the candidatePool into word family
     // should have the key that is wordFamily and value is an ArrayList
     public ArrayList<String> getNewCandidateList(char guess) {
-
+        // Return an empty list if candidateList is null or empty
+        if (candidateList == null || candidateList.isEmpty()) {
+            return new ArrayList<>();
+        }
         HashMap<ArrayList<Character>, ArrayList<String>> intermediateResult = new HashMap<>();
 
         for (int i = 0; i < candidateList.size(); i++) {
@@ -53,6 +56,9 @@ public class EvilSolution {
 
             }
         }
+
+
+
 
         int maxSize = 0;
         ArrayList<Character> tempKey = new ArrayList<>();
