@@ -99,6 +99,7 @@ public class EvilSolution {
 
     // check if the EvilHangman is solved
     public boolean gotSolved() {
+
         return !wordPattern.contains('_');
     }
 

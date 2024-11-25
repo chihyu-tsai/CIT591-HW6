@@ -72,18 +72,6 @@ public class EvilHangman {
 
     }
 
-    /*
-    // record what's being guessed
-    private void recordGuess(char guess) {
-        previousGuesses.add(guess);
-        boolean isCorrect = evilSolution.getNewCandidateList(guess,wordList);
-        if (!isCorrect) {
-            incorrectGuesses.add(guess);
-        }
-    }
-    */
-
-
 
 
     private static ArrayList<String> dictionaryToList(String filename) throws IOException {
@@ -101,7 +89,7 @@ public class EvilHangman {
 
 
     // get every word length of the dictionary, no duplicate so use set
-    public ArrayList<Integer> allLengthInList(ArrayList<String> dictionary) {
+    private ArrayList<Integer> allLengthInList(ArrayList<String> dictionary) {
         ArrayList<Integer> lenList = new ArrayList<>();
         for (int i = 0; i < dictionary.size(); i++) {
             // remove duplicates so the list looks clean
